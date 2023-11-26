@@ -1,32 +1,54 @@
-// This program demonstrates how the >> operator should not
-// be used to read data that contain whitespace characters
-// from a file.
+// This program uses a function to return a structure. This
+// is a modification of Program 11-2 .
 #include <iostream>
-#include <fstream>
-#include <string>
+#include <iomanip>
+#include <cmath> // For the pow function
 using namespace std;
+
+// Constant for pi.
+const double PI = 3.14159;
+
+// Structure declaration
+struct Circle
+{
+    double radius; // A circle's radius
+    double diameter; // A circle's diameter
+    double area; // A circle's area
+};
+
+// Function prototype
+Circle getInfo();
+
 int main()
 {
-    string input; // To hold file input
-    fstream nameFile; // File stream object
-    
-    // Open the file in input mode.
-    nameFile.open("murphy.txt", ios::in);
-    
-    // If the file was successfully opened, continue.
-    if (nameFile)
-    {
-        // Read the file contents.
-        while (nameFile >> input)
-        {
-            cout << input;
-        }
-        // Close the file.
-        nameFile.close();
-    }
-    else
-    {
-        cout << "ERROR: Cannot open file.\n";
-    }
+    Circle c; // Define a structure variable
+    // Get data about the circle.
+    c = getInfo();
+    // Calculate the circle's area.
+    c.area = PI * pow(c.radius, 2.0);
+    // Display the circle data.
+    cout << "The radius and area of the circle are:\n";
+    cout << fixed << setprecision(2);
+    cout << "Radius: " << c.radius << endl;
+    cout << "Area: " << c.area << endl;
     return 0;
+}
+
+//****************************************************************
+// Definition of function getInfo. This function uses a local *
+// variable, tempCircle, which is a circle structure. The user *
+// enters the diameter of the circle, which is stored in *
+// tempCircle.diameter. The function then calculates the radius *
+// which is stored in tempCircle.radius. tempCircle is then *
+// returned from the function. *
+//****************************************************************
+Circle getInfo()
+{
+    Circle tempCircle; // Temporary structure variable
+    // Store circle data in the temporary variable.
+    cout << "Enter the diameter of a circle: ";
+    cin >> tempCircle.diameter;
+    tempCircle.radius = tempCircle.diameter / 2.0;
+    // Return the temporary variable.
+    return tempCircle;
 }

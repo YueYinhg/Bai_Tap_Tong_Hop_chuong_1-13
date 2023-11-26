@@ -1,225 +1,59 @@
 #include <iostream>
-#include <fstream>
 #include <iomanip>
-#include <limits> // for numeric_limits
-#include <ctime>
+#include <string>
 
 using namespace std;
 
-struct InventoryRecord {
-    string itemDescription;
-    int quantityOnHand;
-    double wholesaleCost;
-    double retailCost;
-    string dateAdded;
+// Define the structure for a soft drink
+struct SoftDrink {
+    string name;
+    double cost;
+    int quantity;
 };
 
-void addRecord(ofstream& outFile) {
-    InventoryRecord record;
-
-    cout << "Enter item description: ";
-    cin.ignore(); // Clear input buffer
-    getline(cin, record.itemDescription);
-
-    do {
-        cout << "Enter quantity on hand: ";
-        cin >> record.quantityOnHand;
-
-        if (record.quantityOnHand < 0) {
-            cout << "Invalid input. Please enter a non-negative value.\n";
-        }
-    } while (record.quantityOnHand < 0);
-
-    do {
-        cout << "Enter wholesale cost: $";
-        cin >> record.wholesaleCost;
-
-        if (record.wholesaleCost < 0) {
-            cout << "Invalid input. Please enter a non-negative value.\n";
-        }
-    } while (record.wholesaleCost < 0);
-
-    do {
-        cout << "Enter retail cost: $";
-        cin >> record.retailCost;
-
-        if (record.retailCost < 0) {
-            cout << "Invalid input. Please enter a non-negative value.\n";
-        }
-    } while (record.retailCost < 0);
-
-    cin.ignore(); // Clear input buffer
-    cout << "Enter date added to inventory (MM/DD/YYYY): ";
-    getline(cin, record.dateAdded);
-
-    // Additional input validation for date format
-    while (!isValidDateFormat(record.dateAdded)) {
-        cout << "Invalid date format. Please enter the date in MM/DD/YYYY format: ";
-        getline(cin, record.dateAdded);
-    }
-
-    outFile << record.itemDescription << " " << record.quantityOnHand << " " << fixed << setprecision(2)
-            << record.wholesaleCost << " " << record.retailCost << " " << record.dateAdded << endl;
-
-    cout << "Record added successfully.\n";
-}
-
-bool isValidDateFormat(const string& date) {
-    // Validate date format (MM/DD/YYYY)
-    tm timeStruct = {};
-    istringstream ss(date);
-    ss >> get_time(&timeStruct, "%m/%d/%Y");
-    return !ss.fail();
-}
-
-void displayRecord(ifstream& inFile) {
-    InventoryRecord record;
-
-    cout << "Enter item description to display: ";
-    string searchDescription;
-    cin.ignore(); // Clear input buffer
-    getline(cin, searchDescription);
-
-    bool found = false;
-
-    while (inFile >> record.itemDescription >> record.quantityOnHand >> record.wholesaleCost
-            >> record.retailCost >> record.dateAdded) {
-        if (record.itemDescription == searchDescription) {
-            found = true;
-            cout << "Item Description: " << record.itemDescription << endl;
-            cout << "Quantity on Hand: " << record.quantityOnHand << endl;
-            cout << "Wholesale Cost: $" << record.wholesaleCost << endl;
-            cout << "Retail Cost: $" << record.retailCost << endl;
-            cout << "Date Added to Inventory: " << record.dateAdded << endl;
-            break;
-        }
-    }
-
-    if (!found) {
-        cout << "Record not found.\n";
-    }
-}
-
-void changeRecord(fstream& file) {
-    InventoryRecord record;
-
-    cout << "Enter item description to change: ";
-    string searchDescription;
-    cin.ignore(); // Clear input buffer
-    getline(cin, searchDescription);
-
-    bool found = false;
-    streampos foundPos;
-
-    while (file >> record.itemDescription >> record.quantityOnHand >> record.wholesaleCost
-            >> record.retailCost >> record.dateAdded) {
-        if (record.itemDescription == searchDescription) {
-            found = true;
-            foundPos = file.tellg(); // Save the position to overwrite the record later
-            break;
-        }
-    }
-
-    if (found) {
-        // Prompt user for new data
-        cout << "Enter new quantity on hand: ";
-        cin >> record.quantityOnHand;
-
-        do {
-            cout << "Enter new wholesale cost: $";
-            cin >> record.wholesaleCost;
-
-            if (record.wholesaleCost < 0) {
-                cout << "Invalid input. Please enter a non-negative value.\n";
-            }
-        } while (record.wholesaleCost < 0);
-
-        do {
-            cout << "Enter new retail cost: $";
-            cin >> record.retailCost;
-
-            if (record.retailCost < 0) {
-                cout << "Invalid input. Please enter a non-negative value.\n";
-            }
-        } while (record.retailCost < 0);
-
-        cin.ignore(); // Clear input buffer
-        cout << "Enter new date added to inventory (MM/DD/YYYY): ";
-        getline(cin, record.dateAdded);
-
-        // Additional input validation for date format
-        while (!isValidDateFormat(record.dateAdded)) {
-            cout << "Invalid date format. Please enter the date in MM/DD/YYYY format: ";
-            getline(cin, record.dateAdded);
-        }
-
-        // Move file pointer to the position of the record found and overwrite it
-        file.seekp(foundPos);
-        file << record.itemDescription << " " << record.quantityOnHand << " " << fixed << setprecision(2)
-             << record.wholesaleCost << " " << record.retailCost << " " << record.dateAdded << endl;
-
-        cout << "Record changed successfully.\n";
-    } else {
-        cout << "Record not found.\n";
-    }
-}
+// Function prototypes
+void displayMenu(const SoftDrink drinks[], int size);
+double insertMoney();
+void purchaseDrink(SoftDrink& drink, double amount);
 
 int main() {
-    int choice;
+    const int NUM_DRINKS = 5;  // Number of different drinks in the machine
+
+    // Initialize an array of SoftDrink structures
+    SoftDrink drinks[NUM_DRINKS] = {
+        {"Cola", 0.75, 20},
+        {"Root Beer", 0.75, 20},
+        {"Lemon-Lime", 0.75, 20},
+        {"Grape Soda", 0.80, 20},
+        {"Cream Soda", 0.80, 20}
+    };
+
+    double totalEarnings = 0.0;
+    int choice;  // Move the declaration here
 
     do {
-        cout << "\nInventory Management System\n";
-        cout << "1. Add new record\n";
-        cout << "2. Display record\n";
-        cout << "3. Change record\n";
-        cout << "4. Quit\n";
-        cout << "Enter your choice: ";
+        // Display the menu
+        displayMenu(drinks, NUM_DRINKS);
+
+        // Get user choice
+        cout << "Enter the number of the drink you want (1-" << NUM_DRINKS << ") or 0 to quit: ";
         cin >> choice;
 
-        switch (choice) {
-            case 1: {
-                ofstream outFile("inventory.txt", ios::app); // Open file in append mode
-
-                if (!outFile) {
-                    cerr << "Error opening file for writing.\n";
-                    return 1;
-                }
-
-                addRecord(outFile);
-                outFile.close();
-                break;
-            }
-            case 2: {
-                ifstream inFile("inventory.txt");
-
-                if (!inFile) {
-                    cerr << "Error opening file for reading.\n";
-                    return 1;
-                }
-
-                displayRecord(inFile);
-                inFile.close();
-                break;
-            }
-            case 3: {
-                fstream file("inventory.txt", ios::in | ios::out);
-
-                if (!file) {
-                    cerr << "Error opening file for reading and writing.\n";
-                    return 1;
-                }
-
-                changeRecord(file);
-                file.close();
-                break;
-            }
-            case 4:
-                cout << "Exiting the program.\n";
-                break;
-            default:
-                cout << "Invalid choice. Please enter a number between 1 and 4.\n";
+        if (choice > 0 && choice <= NUM_DRINKS) {
+            // Process the purchase
+            double amountInserted = insertMoney();
+            purchaseDrink(drinks[choice - 1], amountInserted);
+            totalEarnings += drinks[choice - 1].cost;
+        } else if (choice != 0) {
+            cout << "Invalid choice. Please try again.\n";
         }
-    } while (choice != 4);
+
+    } while (choice != 0);
+
+    cout << "Total earnings: $" << fixed << setprecision(2) << totalEarnings << endl;
+    cout << "Exiting the soft drink machine program.\n";
 
     return 0;
 }
+
+// ... (rest of the code remains the same)

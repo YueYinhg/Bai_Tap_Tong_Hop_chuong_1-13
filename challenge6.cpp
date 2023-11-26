@@ -1,50 +1,79 @@
 #include <iostream>
-#include <fstream>
 #include <string>
+#include <limits>
 
 using namespace std;
 
-// Function to search for and display occurrences of a string in a file
-void searchAndDisplay(const string& filename, const string& searchStr) {
-    ifstream file(filename);
+// Define the structure for soccer player data
+struct SoccerPlayer {
+    string playerName;
+    int playerNumber;
+    int pointsScored;
+};
 
-    if (!file) {
-        cerr << "Error: Unable to open the file.\n";
-        return;
+// Function to input data for a soccer player
+void inputPlayerData(SoccerPlayer& player) {
+    cout << "Enter data for a soccer player:\n";
+
+    cout << "Player's Name: ";
+    cin.ignore();
+    getline(cin, player.playerName);
+
+    cout << "Player's Number: ";
+    cin >> player.playerNumber;
+
+    // Input validation for player number
+    while (player.playerNumber < 0) {
+        cout << "Player's number cannot be negative. Enter again: ";
+        cin >> player.playerNumber;
     }
 
-    string line;
-    int occurrences = 0;
+    cout << "Points Scored by Player: ";
+    cin >> player.pointsScored;
 
-    // Read and search each line in the file
-    while (getline(file, line)) {
-        size_t found = line.find(searchStr);
-        if (found != string::npos) {
-            // Display the line containing the search string
-            cout << line << endl;
-            occurrences++;
-        }
+    // Input validation for points scored
+    while (player.pointsScored < 0) {
+        cout << "Points scored cannot be negative. Enter again: ";
+        cin >> player.pointsScored;
     }
-
-    file.close();
-
-    // Display the total number of occurrences
-    cout << "\nTotal occurrences of \"" << searchStr << "\": " << occurrences << endl;
 }
 
 int main() {
-    // Prompt the user for the file name and search string
-    cout << "Enter the name of the file: ";
-    string fileName;
-    cin >> fileName;
+    const int numPlayers = 12;
+    SoccerPlayer team[numPlayers];
 
-    cout << "Enter the string to search for: ";
-    string searchStr;
-    cin >> searchStr;
+    // Input data for each player
+    for (int i = 0; i < numPlayers; ++i) {
+        cout << "\nPlayer " << i + 1 << ":\n";
+        inputPlayerData(team[i]);
+    }
 
-    // Search for and display occurrences in the file
-    cout << "\nLines containing \"" << searchStr << "\":\n";
-    searchAndDisplay(fileName, searchStr);
+    // Display table of player information
+    cout << "\nPlayer Information:\n";
+    cout << "-------------------------------------------------\n";
+    cout << "Player Number\tPlayer Name\tPoints Scored\n";
+    cout << "-------------------------------------------------\n";
+
+    int totalPoints = 0;
+    int maxPoints = numeric_limits<int>::min();
+    int maxPointsPlayerIndex = 0;
+
+    for (int i = 0; i < numPlayers; ++i) {
+        cout << team[i].playerNumber << "\t\t" << team[i].playerName << "\t\t" << team[i].pointsScored << endl;
+
+        totalPoints += team[i].pointsScored;
+
+        if (team[i].pointsScored > maxPoints) {
+            maxPoints = team[i].pointsScored;
+            maxPointsPlayerIndex = i;
+        }
+    }
+
+    // Display team statistics
+    cout << "-------------------------------------------------\n";
+    cout << "Total Points: " << totalPoints << endl;
+    cout << "Player with the most points: " << team[maxPointsPlayerIndex].playerName << " (Player Number "
+         << team[maxPointsPlayerIndex].playerNumber << ") with " << maxPoints << " points.\n";
 
     return 0;
 }

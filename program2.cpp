@@ -1,27 +1,38 @@
-// This program writes data to a file, closes the file,
-// then reopens the file and appends more data.
+// This program stores data about a circle in a structure.
 #include <iostream>
-#include <fstream>
+#include <cmath> // For the pow function
+#include <iomanip>
 using namespace std;
+
+// Constant for pi.
+const double PI = 3.14159;
+
+// Structure declaration
+struct Circle
+{
+    double radius; // A circle's radius
+    double diameter; // A circle's diameter
+    double area; // A circle's area
+};
+
 int main()
 {
-    ofstream dataFile;
-    cout << "Opening file...\n";
-    // Open the file in output mode.
-    dataFile.open("demofile.txt", ios::out);
-    cout << "Now writing data to the file.\n";
-    dataFile << "Jones\n"; // Write line 1
-    dataFile << "Smith\n"; // Write line 2
-    cout << "Now closing the file.\n";
-    dataFile.close(); // Close the file
-    cout << "Opening the file again...\n";
-    // Open the file in append mode.
-    dataFile.open("demofile.txt", ios::out | ios::app);
-    cout << "Writing more data to the file.\n";
-    dataFile << "Willis\n"; // Write line 3
-    dataFile << "Davis\n"; // Write line 4
-    cout << "Now closing the file.\n";
-    dataFile.close(); // Close the file
-    cout << "Done.\n";
+    Circle c; // Define a structure variable
+    
+    // Get the circle's diameter.
+    cout << "Enter the diameter of a circle: ";
+    cin >> c.diameter;
+    
+    // Calculate the circle's radius.
+    c.radius = c.diameter / 2;
+    
+    // Calculate the circle's area.
+    c.area = PI * pow(c.radius, 2.0);
+    
+    // Display the circle data.
+    cout << fixed << showpoint << setprecision(2);
+    cout << "The radius and area of the circle are:\n";
+    cout << "Radius: " << c.radius << endl;
+    cout << "Area: " << c.area << endl;
     return 0;
 }

@@ -1,64 +1,97 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 
 using namespace std;
 
-// Function to read and display each line in the file (joke file)
-void displayJoke(const string& filename) {
-    ifstream jokeFile(filename);
+// Define the structure for company division
+struct DivisionData {
+    string divisionName;
+    double firstQuarterSales;
+    double secondQuarterSales;
+    double thirdQuarterSales;
+    double fourthQuarterSales;
+    double totalAnnualSales;
+    double averageQuarterlySales;
+};
 
-    if (!jokeFile) {
-        cerr << "Error: Unable to open the joke file.\n";
-        return;
+// Function to input sales data for a division
+void inputSalesData(DivisionData& division) {
+    cout << "Enter sales data for " << division.divisionName << " division:\n";
+    cout << "First Quarter Sales: ";
+    cin >> division.firstQuarterSales;
+
+    // Input validation
+    while (division.firstQuarterSales < 0) {
+        cout << "Sales figures cannot be negative. Enter again: ";
+        cin >> division.firstQuarterSales;
     }
 
-    string line;
-    while (getline(jokeFile, line)) {
-        cout << line << endl;
+    cout << "Second Quarter Sales: ";
+    cin >> division.secondQuarterSales;
+
+    while (division.secondQuarterSales < 0) {
+        cout << "Sales figures cannot be negative. Enter again: ";
+        cin >> division.secondQuarterSales;
     }
 
-    jokeFile.close();
+    cout << "Third Quarter Sales: ";
+    cin >> division.thirdQuarterSales;
+
+    while (division.thirdQuarterSales < 0) {
+        cout << "Sales figures cannot be negative. Enter again: ";
+        cin >> division.thirdQuarterSales;
+    }
+
+    cout << "Fourth Quarter Sales: ";
+    cin >> division.fourthQuarterSales;
+
+    while (division.fourthQuarterSales < 0) {
+        cout << "Sales figures cannot be negative. Enter again: ";
+        cin >> division.fourthQuarterSales;
+    }
 }
 
-// Function to display only the last line of the file (punch line file)
-void displayPunchLine(const string& filename) {
-    ifstream punchLineFile(filename);
+// Function to calculate total and average sales for a division
+void calculateSales(DivisionData& division) {
+    division.totalAnnualSales = division.firstQuarterSales + division.secondQuarterSales +
+                               division.thirdQuarterSales + division.fourthQuarterSales;
 
-    if (!punchLineFile) {
-        cerr << "Error: Unable to open the punch line file.\n";
-        return;
-    }
+    division.averageQuarterlySales = division.totalAnnualSales / 4.0;
+}
 
-    // Seek to the end of the file
-    punchLineFile.seekg(0, ios::end);
-
-    // Back up to the beginning of the last line
-    while (punchLineFile.tellg() > 0 && punchLineFile.get() != '\n') {
-        punchLineFile.seekg(-2, ios::cur);
-    }
-
-    // Display the punch line
-    string punchLine;
-    getline(punchLineFile, punchLine);
-    cout << punchLine << endl;
-
-    punchLineFile.close();
+// Function to display sales data for a division
+void displaySalesData(const DivisionData& division) {
+    cout << "\nSales data for " << division.divisionName << " division:\n";
+    cout << "Total Annual Sales: $" << division.totalAnnualSales << endl;
+    cout << "Average Quarterly Sales: $" << division.averageQuarterlySales << endl;
+    cout << "-----------------------------------------\n";
 }
 
 int main() {
-    // File names
-    string jokeFileName = "joke.txt";
-    string punchLineFileName = "punchline.txt";
+    // Create variables for each division
+    DivisionData eastDivision = {"East"};
+    DivisionData westDivision = {"West"};
+    DivisionData northDivision = {"North"};
+    DivisionData southDivision = {"South"};
 
-    // Display the joke
-    cout << "Joke:\n";
-    displayJoke(jokeFileName);
-    cout << "\n";
+    // Input and calculate sales data for each division
+    inputSalesData(eastDivision);
+    calculateSales(eastDivision);
 
-    // Display the punch line
-    cout << "Punch Line:\n";
-    displayPunchLine(punchLineFileName);
+    inputSalesData(westDivision);
+    calculateSales(westDivision);
+
+    inputSalesData(northDivision);
+    calculateSales(northDivision);
+
+    inputSalesData(southDivision);
+    calculateSales(southDivision);
+
+    // Display sales data for each division
+    displaySalesData(eastDivision);
+    displaySalesData(westDivision);
+    displaySalesData(northDivision);
+    displaySalesData(southDivision);
 
     return 0;
 }

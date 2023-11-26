@@ -1,38 +1,56 @@
-// This file demonstrates the getline function with
-// a specified delimiter.
+// This program demonstrates a union.
 #include <iostream>
-#include <fstream>
-#include <string>
+#include <iomanip>
 using namespace std;
+
+union PaySource
+{
+    int hours; // Hours worked
+    float sales; // Amount of sales
+};
+
 int main()
 {
-    string input; // To hold file input
+    PaySource employee1; // Define a union variable
+    char payType; // To hold the pay type
+    float payRate; // Hourly pay rate
+    float grossPay; // Gross pay
     
-    // Open the file for input.
-    fstream dataFile("names2.txt", ios::in);
+    cout << fixed << showpoint << setprecision(2);
+    cout << "This program calculates either hourly wages or\n";
+    cout << "sales commission.\n";
     
-    // If the file was successfully opened, continue.
-    if (dataFile)
+    // Get the pay type, hourly or commission.
+    cout << "Enter H for hourly wages or C for commission: ";
+    cin >> payType;
+    
+    // Determine the gross pay, depending on the pay type.
+    if (payType == 'H' || payType == 'h')
     {
-        // Read an item using $ as a delimiter.
-        getline(dataFile, input, '$');
-        
-        // While the last read operation
-        // was successful, continue.
-        while (dataFile)
-        {
-            // Display the last item read.
-            cout << input << endl;
-            // Read an item using $ as a delimiter.
-            getline(dataFile, input, '$');
-        }
-        
-        // Close the file.
-        dataFile.close();
+        // This is an hourly paid employee. Get the
+        // pay rate and hours worked.
+        cout << "What is the hourly pay rate? ";
+        cin >> payRate;
+        cout << "How many hours were worked? ";
+        cin >> employee1.hours;
+        // Calculate and display the gross pay.
+        grossPay = employee1.hours * payRate;
+        cout << "Gross pay: $" << grossPay << endl;
+    }
+    else if (payType == 'C' || payType == 'c')
+    {
+        // This is a commission-paid employee. Get the
+        // amount of sales.
+        cout << "What are the total sales for this employee? ";
+        cin >> employee1.sales;
+        // Calculate and display the gross pay.
+        grossPay = employee1.sales * 0.10;
+        cout << "Gross pay: $" << grossPay << endl;
     }
     else
     {
-        cout << "ERROR: Cannot open file.\n";
+        // The user made an invalid selection.
+        cout << payType << " is not a valid selection.\n";
     }
     return 0;
 }

@@ -1,27 +1,31 @@
-// This program demonstrates the put member function.
+// This program demonstrates an enumerated data type.
 #include <iostream>
-#include <fstream>
+#include <iomanip>
 using namespace std;
+
+enum Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY };
+
 int main()
 {
-    char ch; // To hold a character
+    const int NUM_DAYS = 5; // The number of days
+    double sales[NUM_DAYS]; // To hold sales for each day
+    double total = 0.0; // Accumulator
+    int index; // Loop counter
     
-    // Open the file for output.
-    fstream dataFile("sentence.txt", ios::out);
-    cout << "Type a sentence and be sure to end it with a ";
-    cout << "period.\n";
-    
-    // Get a sentence from the user one character at a time
-    // and write each character to the file.
-    cin.get(ch);
-    while (ch != '.')
+    // Get the sales for each day.
+    for (index = MONDAY; index <= FRIDAY; index++)
     {
-        dataFile.put(ch);
-        cin.get(ch);
+        cout << "Enter the sales for day "
+             << index << ": ";
+        cin >> sales[index];
     }
-    dataFile.put(ch); // Write the period.
     
-    // Close the file.
-    dataFile.close();
+    // Calculate the total sales.
+    for (index = MONDAY; index <= FRIDAY; index++)
+        total += sales[index];
+    
+    // Display the total.
+    cout << "The total sales are $" << setprecision(2)
+         << fixed << total << endl;
     return 0;
 }

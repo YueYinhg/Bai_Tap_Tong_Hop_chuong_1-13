@@ -1,31 +1,40 @@
-// This program uses the setprecision and fixed
-// manipulators to format file output.
+// This program demonstrates partially initialized
+// structure variables.
 #include <iostream>
+#include <string>
 #include <iomanip>
-#include <fstream>
 using namespace std;
+
+struct EmployeePay
+{
+    string name; // Employee name
+    int empNum; // Employee number
+    double payRate; // Hourly pay rate
+    double hours; // Hours worked
+    double grossPay; // Gross pay
+};
+
 int main()
 {
-    fstream dataFile;
-    double num = 17.816392;
+    EmployeePay employee1 = {"Betty Ross", 141, 18.75};
+    EmployeePay employee2 = {"Jill Sandburg", 142, 17.50};
+    cout << fixed << showpoint << setprecision(2);
     
-    dataFile.open("numfile.txt", ios::out); // Open in output mode
-    dataFile << fixed; // Format for fixed-point notation
-    dataFile << num << endl; // Write the number
+    // Calculate pay for employee1
+    cout << "Name: " << employee1.name << endl;
+    cout << "Employee Number: " << employee1.empNum << endl;
+    cout << "Enter the hours worked by this employee: ";
+    cin >> employee1.hours;
+    employee1.grossPay = employee1.hours * employee1.payRate;
+    cout << "Gross Pay: " << employee1.grossPay << endl << endl;
     
-    dataFile << setprecision(4); // Format for 4 decimal places
-    dataFile << num << endl; // Write the number
+    // Calculate pay for employee2
+    cout << "Name: " << employee2.name << endl;
+    cout << "Employee Number: " << employee2.empNum << endl;
+    cout << "Enter the hours worked by this employee: ";
+    cin >> employee2.hours;
+    employee2.grossPay = employee2.hours * employee2.payRate;
     
-    dataFile << setprecision(3); // Format for 3 decimal places
-    dataFile << num << endl; // Write the number
-    
-    dataFile << setprecision(2); // Format for 2 decimal places
-    dataFile << num << endl; // Write the number
-    
-    dataFile << setprecision(1); // Format for 1 decimal place
-    dataFile << num << endl; // Write the number
-    
-    cout << "Done.\n";
-    dataFile.close(); // Close the file
+    cout << "Gross Pay: " << employee2.grossPay << endl;
     return 0;
 }

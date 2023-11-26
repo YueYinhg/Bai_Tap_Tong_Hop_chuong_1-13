@@ -1,75 +1,77 @@
-// This program demonstrates the return value of the stream
-// object error testing member functions.
+// This program uses nested structures.
 #include <iostream>
-#include <fstream>
+#include <string>
 using namespace std;
 
-// Function prototype
-void showState(fstream &);
+// The Date structure holds data about a date.
+struct Date
+{
+    int month;
+    int day;
+    int year;
+};
+
+// The Place structure holds a physical address.
+struct Place
+{
+    string address;
+    string city;
+    string state;
+    string zip;
+};
+
+// The EmployeeInfo structure holds an employee's data.
+struct EmployeeInfo
+{
+    string name;
+    int employeeNumber;
+    Date birthDate; // Nested structure
+    Place residence; // Nested structure
+};
 
 int main()
 {
-    int num = 10;
-    // Open the file for output.
-    fstream testFile("stuff.dat", ios::out);
+    // Define a structure variable to hold info about the manager.
+    EmployeeInfo manager;
     
-    if (testFile.fail())
-    {
-        cout << "ERROR: Cannot open the file.\n";
-        return 0;
-    }
+    // Get the manager's name and employee number
+    cout << "Enter the manager's name: ";
+    getline(cin, manager.name);
+    cout << "Enter the manager's employee number: ";
+    cin >> manager.employeeNumber;
     
-    // Write a value to the file.
-    cout << "Writing the value " << num << " to the file.\n";
-    testFile << num;
+    // Get the manager's birth date
+    cout << "Now enter the manager's date of birth.\n";
+    cout << "Month (up to 2 digits): ";
+    cin >> manager.birthDate.month;
+    cout << "Day (up to 2 digits): ";
+    cin >> manager.birthDate.day;
+    cout << "Year: ";
+    cin >> manager.birthDate.year;
+    cin.ignore(); // Skip the remaining newline character
     
-    // Show the bit states.
-    showState(testFile);
+    // Get the manager's residence information
+    cout << "Enter the manager's street address: ";
+    getline(cin, manager.residence.address);
+    cout << "City: ";
+    getline(cin, manager.residence.city);
+    cout << "State: ";
+    getline(cin, manager.residence.state);
+    cout << "ZIP Code: ";
+    getline(cin, manager.residence.zip);                                                                                                    
     
-    // Close the file.
-    testFile.close();
-    
-    // Reopen the file for input.
-    testFile.open("stuff.dat", ios::in);
-    if (testFile.fail())
-    {
-        cout << "ERROR: Cannot open the file.\n";
-        return 0;
-    }
-    
-    // Read the only value from the file.
-    cout << "Reading from the file.\n";
-    testFile >> num;
-    cout << "The value " << num << " was read.\n";
-    
-    // Show the bit states.
-    showState(testFile);
-    
-    // No more data in the file, but force an invalid read operation.
-    cout << "Forcing a bad read operation.\n";
-    testFile >> num;
-    
-    // Show the bit states.
-    showState(testFile);
-    
-    // Close the file.
-    testFile.close();
+    // Display the information just entered
+    cout << "\nHere is the manager's information:\n";
+    cout << manager.name << endl;
+    cout << "Employee number " << manager.employeeNumber << endl;
+    cout << "Date of birth: ";
+    cout << manager.birthDate.month << "-";
+    cout << manager.birthDate.day << "-";
+    cout << manager.birthDate.year << endl;
+    cout << "Place of residence:\n";
+    cout << manager.residence.address << endl;
+    cout << manager.residence.city << ", ";
+    cout << manager.residence.state << " ";
+    cout << manager.residence.zip << endl;
     return 0;
-}
-
-//*****************************************************************
-// Definition of function showState. This function uses *
-// an fstream reference as its parameter. The return values of *
-// the eof(), fail(), bad(), and good() member functions are *
-// displayed. The clear() function is called before the function *
-// returns. *
-//*****************************************************************
-void showState(fstream &file)
-{
-    cout << "File Status:\n";
-    cout << " eof bit: " << file.eof() << endl;
-    cout << " fail bit: " << file.fail() << endl;
-    cout << " bad bit: " << file.bad() << endl;
-    cout << " good bit: " << file.good() << endl;
-    file.clear(); // Clear any bad bits
 }

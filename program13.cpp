@@ -1,37 +1,58 @@
-// This program uses the write and read functions.
+// This program demonstrates an enumerated data type.
 #include <iostream>
-#include <fstream>
+#include <iomanip>
 using namespace std;
+
+enum Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY };
+
+// Function prototype
+void displayDayName(Day);
 
 int main()
 {
-    const int SIZE = 4;
-    char data[SIZE] = {'A', 'B', 'C', 'D'};
-    fstream file;
-
-    // Open the file for output in binary mode.
-    file.open("test.dat", ios::out | ios::binary);
+    const int NUM_DAYS = 5; // The number of days
+    double sales[NUM_DAYS]; // To hold sales for each day
+    double total = 0.0; // Accumulator
+    Day workDay; // Loop counter
     
-    // Write the contents of the array to the file.
-    cout << "Writing the characters to the file.\n";
-    file.write(data, sizeof(data));
+    // Get the sales for each day.
+    for (workDay = MONDAY; workDay <= FRIDAY;
+                           workDay = static_cast<Day>(workDay + 1))
+    {
+        cout << "Enter the sales for day ";
+        displayDayName(workDay);
+        cout << ": ";
+        cin >> sales[workDay];
+    }
     
-    // Close the file.
-    file.close();
+    // Calculate the total sales.
+    for (workDay = MONDAY; workDay <= FRIDAY;
+                           workDay = static_cast<Day>(workDay + 1))
+        total += sales[workDay];
     
-    // Open the file for input in binary mode.
-    file.open("test.dat", ios::in | ios::binary);
-    
-    // Read the contents of the file into the array.
-    cout << "Now reading the data back into memory.\n";
-    file.read(data, sizeof(data));
-    
-    // Display the contents of the array.
-    for (int count = 0; count < SIZE; count++)
-    cout << data[count] << " ";
-    cout << endl;
-    
-    // Close the file.
-    file.close();
+    // Display the total.
+    cout << "The total sales are $" << setprecision(2)
+         << fixed << total << endl;
     return 0;
+}
+
+//**********************************************************
+// Definition of the displayDayName function *
+// This function accepts an argument of the Day type and *
+// displays the corresponding name of the day. *
+//**********************************************************
+void displayDayName(Day d)
+{
+    switch(d)
+    {
+        case MONDAY : cout << "Monday";
+        break;
+        case TUESDAY : cout << "Tuesday";
+        break;
+        case WEDNESDAY : cout << "Wednesday";
+        break;
+        case THURSDAY : cout << "Thursday";
+        break;
+        case FRIDAY : cout << "Friday";
+    }
 }

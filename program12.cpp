@@ -1,49 +1,33 @@
-// This program demonstrates reading from one file and writing
-// to a second file.
+// This program demonstrates an enumerated data type.
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <cctype> // Needed for the toupper function.
+#include <iomanip>
 using namespace std;
+
+enum Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY };
 
 int main()
 {
-    string fileName; // To hold the file name
-    char ch; // To hold a character
-    ifstream inFile; // Input file
+    const int NUM_DAYS = 5; // The number of days
+    double sales[NUM_DAYS]; // To hold sales for each day
+    double total = 0.0; // Accumulator
+    Day workDay; // Loop counter
     
-    // Open a file for output.
-    ofstream outFile("out.txt");
-    
-    // Get the input file name.
-    cout << "Enter a file name: ";
-    cin >> fileName;
-    
-    // Open the file for input.
-    inFile.open(filename);
-    
-    // If the input file opened successfully, continue.
-    if (inFile)
+    // Get the sales for each day.
+    for (workDay = MONDAY; workDay <= FRIDAY;
+                           workDay = static_cast<Day>(workDay + 1))
     {
-        // Read a char from file 1.
-        inFile.get(ch);
-        
-        // While the last read operation was
-        // successful, continue.
-        while (inFile)
-        {
-            // Write uppercase char to file 2.
-            outFile.put(toupper(ch));
-            // Read another char from file 1.
-            inFile.get(ch);
-        }
-        
-        // Close the two files.
-        inFile.close();
-        outFile.close();
-        cout << "File conversion done.\n";
+        cout << "Enter the sales for day "
+        << workDay << ": ";
+        cin >> sales[workDay];
     }
-    else
-        cout << "Cannot open " << fileName << endl;
+    
+    // Calculate the total sales.
+    for (workDay = MONDAY; workDay <= FRIDAY;
+                           workDay = static_cast<Day>(workDay + 1))
+        total += sales[workDay];
+    
+    // Display the total.
+    cout << "The total sales are $" << setprecision(2)
+         << fixed << total << endl;
     return 0;
-} 
+}

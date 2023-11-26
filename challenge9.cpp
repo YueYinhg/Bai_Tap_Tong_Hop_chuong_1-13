@@ -1,36 +1,38 @@
 #include <iostream>
-#include <fstream>
-
+#include<iomanip>
 using namespace std;
 
-void encryptFile(const char* inputFile, const char* outputFile) {
-    ifstream inFile(inputFile, ios::binary);
-    ofstream outFile(outputFile, ios::binary);
-
-    if (!inFile || !outFile) {
-        cerr << "Error: Unable to open files.\n";
-        return;
-    }
-
-    char ch;
-    while (inFile.get(ch)) {
-        // Encrypt the character by adding 10 to its ASCII code
-        ch += 10;
-        outFile.put(ch);
-    }
-
-    inFile.close();
-    outFile.close();
-
-    cout << "File encrypted successfully.\n";
-}
-
 int main() {
-    const char* inputFileName = "input.txt";
-    const char* outputFileName = "encrypted_output.txt";
+    // Yêu cầu người dùng nhập số tầng của khách sạn
+    int so_tang;
+    cout << "Nhập số tầng của khách sạn: ";
+    cin >> so_tang;
 
-    // Call the function to encrypt the file
-    encryptFile(inputFileName, outputFileName);
+    int tong_so_phong = 0;
+    int tong_phong_da_dat = 0;
+
+    for (int tang = 1; tang <= so_tang; tang++) {
+        int so_phong_tren_tang;
+        int so_phong_da_dat_tren_tang;
+
+        cout << "Nhập số phòng trên tầng " << tang << ": ";
+        cin >> so_phong_tren_tang;
+
+        cout << "Số phòng đã đặt trên tầng " << tang << ": ";
+        cin >> so_phong_da_dat_tren_tang;
+
+
+        tong_so_phong += so_phong_tren_tang;
+        tong_phong_da_dat += so_phong_da_dat_tren_tang;
+    }
+
+    double ty_le_phong_da_dat = (static_cast<double>(tong_phong_da_dat) / static_cast<double>(tong_so_phong)) * 100.0;
+
+    // Hiển thị kết quả
+    cout << "Tổng số phòng trong khách sạn: " << tong_so_phong << endl;
+    cout << "Số phòng đã đặt: " << tong_phong_da_dat << endl;
+    cout << "Số phòng trống: " << tong_so_phong - tong_phong_da_dat << endl;
+    cout << "Tỷ lệ phòng đã đặt: " << fixed << setprecision(2) << ty_le_phong_da_dat << "%" << endl;
 
     return 0;
 }

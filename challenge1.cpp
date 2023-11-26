@@ -1,40 +1,36 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 
 using namespace std;
 
+// Define the MovieData structure
+struct MovieData {
+    string title;
+    string director;
+    int yearReleased;
+    int runningTime; // in minutes
+};
+
+// Function to display movie information
+void displayMovieInfo(const MovieData& movie) {
+    cout << "Title: " << movie.title << endl;
+    cout << "Director: " << movie.director << endl;
+    cout << "Year Released: " << movie.yearReleased << endl;
+    cout << "Running Time: " << movie.runningTime << " minutes" << endl;
+    cout << "-----------------------------------------\n";
+}
+
 int main() {
-    // Get the file name from the user
-    cout << "Enter the name of the file: ";
-    string fileName;
-    getline(cin, fileName);
+    // Create two MovieData variables and initialize their members
+    MovieData movie1 = {"The Shawshank Redemption", "Frank Darabont", 1994, 142};
+    MovieData movie2 = {"The Godfather", "Francis Ford Coppola", 1972, 175};
 
-    // Open the file
-    ifstream inputFile(fileName);
+    // Display information about each movie using the displayMovieInfo function
+    cout << "Movie 1 Information:\n";
+    displayMovieInfo(movie1);
 
-    // Check if the file is successfully opened
-    if (!inputFile) {
-        cerr << "Error: Unable to open the file.\n";
-        return 1; // Exit the program with an error code
-    }
-
-    // Display the first 10 lines of the file
-    string line;
-    int lineCount = 0;
-
-    while (getline(inputFile, line) && lineCount < 10) {
-        cout << line << endl;
-        lineCount++;
-    }
-
-    // Check if the entire file has been displayed
-    if (lineCount < 10 && inputFile.eof()) {
-        cout << "Entire file has been displayed.\n";
-    }
-
-    // Close the file
-    inputFile.close();
+    cout << "Movie 2 Information:\n";
+    displayMovieInfo(movie2);
 
     return 0;
 }

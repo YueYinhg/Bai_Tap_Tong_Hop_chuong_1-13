@@ -1,29 +1,45 @@
-// This program writes three rows of numbers to a file.
+// This program uses an array of structures.
 #include <iostream>
-#include <fstream>
 #include <iomanip>
 using namespace std;
+
+struct PayInfo
+{
+    int hours; // Hours worked
+    double payRate; // Hourly pay rate
+};
+
 int main()
 {
-    const int ROWS = 3; // Rows to write
-    const int COLS = 3; // Columns to write
+    const int NUM_WORKERS = 3; // Number of workers
+    PayInfo workers[NUM_WORKERS]; // Array of structures
+    int index; // Loop counter
     
-    int nums[ROWS][COLS] = { 2897, 5, 837,
-                             34, 7, 1623,
-                             390, 3456, 12 };
-    fstream outFile("table.txt", ios::out);
-    
-    // Write the three rows of numbers with each
-    // number in a field of 8 character spaces.
-    for (int row = 0; row < ROWS; row++)
+    // Get employee pay data.
+    cout << "Enter the hours worked by " << NUM_WORKERS
+         << " employees and their hourly rates.\n";
+    for (index = 0; index < NUM_WORKERS; index++)
     {
-        for (int col = 0; col < COLS; col++)
-        {
-            outFile << setw(8) << nums[row][col];
-        }
-        outFile << endl;
+        // Get the hours worked by an employee.
+        cout << "Hours worked by employee #" << (index + 1);
+        cout << ": ";
+        cin >> workers[index].hours;
+        // Get the employee's hourly pay rate.
+        cout << "Hourly pay rate for employee #";
+        cout << (index + 1) << ": ";
+        cin >> workers[index].payRate;
+        cout << endl;
     }
-    outFile.close();
-    cout << "Done.\n";
+    
+    // Display each employee's gross pay.
+    cout << "Here is the gross pay for each employee:\n";
+    cout << fixed << showpoint << setprecision(2);
+    for (index = 0; index < NUM_WORKERS; index++)
+    {
+        double gross;
+        gross = workers[index].hours * workers[index].payRate;
+        cout << "Employee #" << (index + 1);
+        cout << ": $" << gross << endl;
+    }
     return 0;
 }

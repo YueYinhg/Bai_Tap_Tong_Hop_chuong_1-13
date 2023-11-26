@@ -1,56 +1,77 @@
-// This program demonstrates how file stream objects may
-// be passed by reference to functions.
+// This program uses nested structures.
 #include <iostream>
-#include <fstream>
 #include <string>
 using namespace std;
 
-// Function prototypes
-bool openFileIn(fstream &, string);
-void showContents(fstream &);
+// The Date structure holds data about a date.
+struct Date
+{
+    int month;
+    int day;
+    int year;
+};
+
+// The Place structure holds a physical address.
+struct Place
+{
+    string address;
+    string city;
+    string state;
+    string zip;
+};
+
+// The EmployeeInfo structure holds an employee's data.
+struct EmployeeInfo
+{
+    string name;
+    int employeeNumber;
+    Date birthDate; // Nested structure
+    Place residence; // Nested structure
+};
 
 int main()
 {
-    fstream dataFile;
+    // Define a structure variable to hold info about the manager.
+    EmployeeInfo manager;
     
-    if (openFileIn(dataFile, "demofile.txt"))
-    {
-        cout << "File opened successfully.\n";
-        cout << "Now reading data from the file.\n\n";
-        showContents(dataFile);
-        dataFile.close();
-        cout << "\nDone.\n";
-    }
-    else
-        cout << "File open error!" << endl;
+    // Get the manager's name and employee number
+    cout << "Enter the manager's name: ";
+    getline(cin, manager.name);
+    cout << "Enter the manager's employee number: ";
+    cin >> manager.employeeNumber;
+    
+    // Get the manager's birth date
+    cout << "Now enter the manager's date of birth.\n";
+    cout << "Month (up to 2 digits): ";
+    cin >> manager.birthDate.month;
+    cout << "Day (up to 2 digits): ";
+    cin >> manager.birthDate.day;
+    cout << "Year: ";
+    cin >> manager.birthDate.year;
+    cin.ignore(); // Skip the remaining newline character
+    
+    // Get the manager's residence information
+    cout << "Enter the manager's street address: ";
+    getline(cin, manager.residence.address);
+    cout << "City: ";
+    getline(cin, manager.residence.city);
+    cout << "State: ";
+    getline(cin, manager.residence.state);
+    cout << "ZIP Code: ";
+    getline(cin, manager.residence.zip);
+    
+    // Display the information just entered
+    cout << "\nHere is the manager's information:\n";
+    cout << manager.name << endl;
+    cout << "Employee number " << manager.employeeNumber << endl;
+    cout << "Date of birth: ";
+    cout << manager.birthDate.month << "-";
+    cout << manager.birthDate.day << "-";
+    cout << manager.birthDate.year << endl;
+    cout << "Place of residence:\n";
+    cout << manager.residence.address << endl;
+    cout << manager.residence.city << ", ";
+    cout << manager.residence.state << " ";
+    cout << manager.residence.zip << endl;
     return 0;
-}
-
-//***********************************************************
-// Definition of function openFileIn. Accepts a reference *
-// to an fstream object as an argument. The file is opened *
-// for input. The function returns true upon success, false *
-// upon failure. *
-//***********************************************************
-bool openFileIn(fstream &file, string name)
-{
-    file.open(name, ios::in);
-    if (file.fail())
-        return false;
-    else
-        return true;
-}
-
-//************************************************************
-// Definition of function showContents. Accepts an fstream *
-// reference as its argument. Uses a loop to read each name *
-// from the file and displays it on the screen. *
-//************************************************************
-void showContents(fstream &file)
-{
-    string line;
-    while (file >> line)
-    {
-        cout << line << endl;
-    }
 }

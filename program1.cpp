@@ -1,18 +1,49 @@
-// This program uses an fstream object to write data to a file.
+// This program demonstrates the use of structures.
 #include <iostream>
-#include <fstream>
+#include <string>
+#include <iomanip>
 using namespace std;
+
+struct PayRoll
+{
+    int empNumber; // Employee number
+    string name; // Employee's name
+    double hours; // Hours worked
+    double payRate; // Hourly payRate
+    double grossPay; // Gross pay
+};
+
 int main()
 {
-    fstream dataFile;
-    cout << "Opening file...\n";
-    dataFile.open("demofile.txt", ios::out); // Open for output
-    cout << "Now writing data to the file.\n";
-    dataFile << "Jones\n"; // Write line 1
-    dataFile << "Smith\n"; // Write line 2
-    dataFile << "Willis\n"; // Write line 3
-    dataFile << "Davis\n"; // Write line 4
-    dataFile.close(); // Close the file
-    cout << “Done.\n”;
+    PayRoll employee; // employee is a PayRoll structure.
+    
+    // Get the employee's number.
+    cout << "Enter the employee's number: ";
+    cin >> employee.empNumber;
+    
+    // Get the employee's name.
+    cout << "Enter the employee's name: ";
+    cin.ignore(); // To skip the remaining ‘\n' character
+    getline(cin, employee.name);
+    
+    // Get the hours worked by the employee.
+    cout << "How many hours did the employee work? ";
+    cin >> employee.hours;
+    
+    // Get the employee's hourly pay rate.
+    cout << "What is the employee's hourly payRate? ";
+    cin >> employee.payRate;
+    
+    // Calculate the employee's gross pay.
+    employee.grossPay = employee.hours * employee.payRate;
+    
+    // Display the employee data.
+    cout << "Here is the employee's payroll data:\n";
+    cout << "Name: " << employee.name << endl;
+    cout << "Number: " << employee.empNumber << endl;
+    cout << "Hours worked: " << employee.hours << endl;
+    cout << "Hourly payRate: " << employee.payRate << endl;
+    cout << fixed << showpoint << setprecision(2);
+    cout << "Gross Pay: $" << employee.grossPay << endl;
     return 0;
 }
